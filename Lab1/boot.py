@@ -21,7 +21,7 @@ else:
 
 # Advertise as 'hostname', alternative to IP address
 try:
-    hostname = "Austin"
+    hostname = "JARVIS"
     mdns = mDNS(wlan)
     # mdns.start(hostname, "MicroPython REPL")
     # mdns.addService('_repl', '_tcp', 23, hostname)
@@ -38,7 +38,7 @@ except OSError:
 from network import telnet
 
 print("start telnet server")
-telnet.start(user='NuclearWalrus', password='RktMan1328')
+telnet.start(user='nuclearwalrus', password='rktman')
 
 # fetch NTP time
 from machine import RTC
