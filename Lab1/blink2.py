@@ -5,7 +5,7 @@ import time
 #Initialize build in LED Pin
 led = Pin(LED, mode=Pin.OUT)
 
-def blink(t):
+def blink():
     t = 0
     while True:
         led(1)
