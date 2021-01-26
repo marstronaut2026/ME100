@@ -11,5 +11,5 @@ while True:
     led(0)
     time.sleep(1)
     t+=1
-    if t == 10:
+    if t == 3:
         break
