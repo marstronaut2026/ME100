@@ -2,7 +2,7 @@ from board import LED
 from machine import Pin
 import time
 led = Pin(LED, mode=Pin.OUT)
-BRate=0.25
+BRate=0.30
 
 
 def morse_dash():
