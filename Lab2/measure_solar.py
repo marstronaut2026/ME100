@@ -3,6 +3,12 @@ from machine import I2C, Pin
 from board import SDA, SCL
 import time
 
+def foo(x,y):
+        try:
+            return x/y
+        except ZeroDivisionError:
+            return 0
+
 i2c = I2C(id=0, scl=Pin(SCL), sda=Pin(SDA), freq=100000)
 
 print("scanning I2C bus ...")
@@ -17,5 +23,8 @@ while True:
     amps = ina.current()
     volts = ina.voltage()
     power = ina.power()
-    print('{:.2f} mA {:.2f} V {:.2f} mW'.format(amps,volts,power))
+    resist = foo(volts,amps)*1000
+    print('{:.2f} mA {:.2f} V {:.2f} mW {:.2f} Ohms'.format(amps,volts,power,resist))
     time.sleep(0.5)
+
+    
