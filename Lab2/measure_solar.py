@@ -14,8 +14,8 @@ ina.configure()
 
 while True:
     ''' Insert your code here to read and print voltage, current, and power from ina219. '''
-    # amps = ina.current()
-    # volts = ina.voltage()
-    # power = ina.power()
-    # print("Current (A): %f \tVoltage (V): %f \tPower (W): %f" %amps %volts %power)
-    # time.sleep(0.5)
+    amps = ina.current()
+    volts = ina.voltage()
+    power = ina.power()
+    print('{:.2f} mA {:.2f} V {:.2f} mW'.format(amps,volts,power))
+    time.sleep(0.5)
