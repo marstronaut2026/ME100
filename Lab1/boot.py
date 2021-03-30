@@ -2,6 +2,7 @@
 from network import WLAN, STA_IF
 from network import mDNS
 import time
+import blink
 
 wlan = WLAN(STA_IF)
 wlan.active(True)
@@ -58,3 +59,5 @@ if rtc.synced():
     print(time.strftime("%c", time.localtime()))
 else:
     print("could not get NTP time")
+
+blink.bl()

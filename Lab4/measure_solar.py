@@ -18,13 +18,13 @@ SHUNT_RESISTOR_OHMS = 0.1
 ina = INA219(SHUNT_RESISTOR_OHMS, i2c)
 ina.configure()
 
-
-''' Insert your code here to read and print voltage, current, and power from ina219. '''
-amps = ina.current()
-volts = ina.voltage()
-power = ina.power()
-resist = foo(volts,amps)*1000
-# print('{:.2f} mA {:.2f} V {:.2f} mW {:.2f} Ohms'.format(amps,volts,power,resist))
-# time.sleep(0.5)
+while True:
+    ''' Insert your code here to read and print voltage, current, and power from ina219. '''
+    amps = ina.current()
+    volts = ina.voltage()
+    power = ina.power()
+    resist = foo(volts,amps)*1000
+    # print('{:.2f} mA {:.2f} V {:.2f} mW {:.2f} Ohms'.format(amps,volts,power,resist))
+    # time.sleep(0.5)
 
     
