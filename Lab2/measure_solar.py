@@ -24,7 +24,7 @@ while True:
     volts = ina.voltage()
     power = ina.power()
     resist = foo(volts,amps)*1000
-    print('{:.2f} mA {:.2f} V {:.2f} mW {:.2f} Ohms'.format(amps,volts,power,resist))
+    print('{} mA {} V {} mW {} Ohms'.format(amps,volts,power,resist))
     time.sleep(0.5)
 
     
