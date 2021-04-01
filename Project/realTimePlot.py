@@ -1,25 +1,8 @@
 import paho.mqtt.client as paho
 import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
 
-"""
-Get measurement results from microphyton board and plot on host computer.
-Use in combination with mqtt_plot_mpy.py.
-
-Install paho MQTT client and matplotlib on host, e.g.
-    $ pip install paho-mqtt
-    $ pip install matplotlib
-
-Start this program first on the host from a terminal prompt, e.g.
-    $ python mqtt_plot_host.py
-then run mqtt_plot_mpy.py on the ESP32.
-
-'print' statements throughout the code are for testing and can be removed once
-verification is complete.
-"""
-
-# Important: change the line below to a unique string,
-# e.g. your name & make corresponding change in mqtt_plot_mpy.py
-session = "AustinJT/ESP32/servo_pos"
+session = "AustinJT/ESP32/servo_pos1"
 BROKER = "broker.mqttdashboard.com"
 qos = 0
 
@@ -33,22 +16,30 @@ print("Connected!")
 # in this example we plot only 1 value, add more as needed
 t = []
 s = []
+ii = 0
 
 # mqtt callbacks
 def data(c, u, message):
     # extract data from MQTT message
+    global ii
+    ii = ii+1
     msg = message.payload.decode('ascii')
     # convert to vector of floats
     f = [ float(x) for x in msg.split(',') ]
-    print("received", f)
+    # print("received", f)
     # append to data vectors, add more as needed
     t.append(f[0])
     s.append(f[1])
+    if (ii%20 == 0):
+        plt.cla()
+        plt.plot(t,s)
+        plt.draw()
+        plt.pause(0.05)
 
 def plot(client, userdata, message):
     # customize this to match your data
     print("plotting ...")
-    plt.plot(t, s, 'rs')
+    plt.plot(t, s)
     plt.xlabel('Time (s)')
     plt.ylabel('Valve Position (degrees)')
     print("show plot ...")
@@ -65,5 +56,4 @@ mqtt.message_callback_add(plot_topic, plot)
 
 # wait for MQTT messages
 # this function never returns
-print("waiting for data ...")
 mqtt.loop_forever()

@@ -1,13 +1,20 @@
 from machine import Pin, PWM, I2C
 from ina219 import INA219
 from board import SDA, SCL
-import array as arr
 import time
 import math as m
 from mqttclient import MQTTClient
 import network
 import sys
 
+
+def ctrl_remote(setPos, servo):
+          
+    du = float(8/90*setPos+3)
+    servo.duty(du)
+ 
+
+##################################################################################################
 def ctrl_filter():
     #initialize I2C
     i2c = I2C(id=0, scl=Pin(SCL), sda=Pin(SDA), freq=100000)
@@ -54,6 +61,7 @@ def ctrl_filter():
         time.sleep(1)
         servo.deinit()
 
+        i2c.deinit()
         print("Telling host to plot data ...")
         # mqtt.publish("{}/plot".format(session), "create the plot")
         # mqtt.disconnect()
@@ -105,6 +113,7 @@ def ctrl():
         time.sleep(1)
         servo.deinit()
 
+        i2c.deinit()
         print("Telling host to plot data ...")
         # mqtt.publish("{}/plot".format(session), "create the plot")
         # mqtt.disconnect()
