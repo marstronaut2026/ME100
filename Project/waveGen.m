@@ -12,3 +12,9 @@ ylabel("Valve Position (degrees)")
 
 f = fopen('test.txt','w+');
 fprintf(f,format,sig);
+fclose('all');
+
+g = fopen('polyfit.txt','w+');
+Y = polyfit(t,sig,6);
+fprintf(g,format,Y);
+    

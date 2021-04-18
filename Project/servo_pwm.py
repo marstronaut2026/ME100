@@ -132,25 +132,27 @@ def sinwave():
         t0 = time.time()
         # f=open("pos.txt","w+")
         while True:
-            # #Allows for input position for servo
-            # servo.duty(int(input("Enter servo position: ")))
+            #Allows for input position for servo
+            val = float(input("Enter servo position: "))
+            time.sleep(5)
+            servo.duty(val)
             # for i in range(3):
             #     servo.duty(duty_cycle[i])
             #     time.sleep(2)
             
-            #Sine wave continuous motion
-            for i in range(60):
-                du = float(m.sin(i/30*m.pi)*4+7)
-                servo.duty(du)
-                txt = "{0} , {1}"
-                print(txt.format(time.time()-t0,du)) 
-                # f.write(txt.format(time.time()-t0,du)) #output position data as text file
+            # #Sine wave continuous motion
+            # for i in range(60):
+            #     du = float(m.sin(i/30*m.pi)*4+7)
+            #     servo.duty(du)
+            #     txt = "{0} , {1}"
+            #     print(txt.format(time.time()-t0,du)) 
+            #     # f.write(txt.format(time.time()-t0,du)) #output position data as text file
 
-                # topic = "{}/data".format(session)
-                # data = "{},{}".format(time.time()-t0, du)
-                # mqtt.publish(topic, data)
+            #     # topic = "{}/data".format(session)
+            #     # data = "{},{}".format(time.time()-t0, du)
+            #     # mqtt.publish(topic, data)
 
-                time.sleep_ms(25) #control speed of rotation
+            #     time.sleep_ms(25) #control speed of rotation
             
 
     except KeyboardInterrupt:

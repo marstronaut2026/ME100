@@ -38,11 +38,11 @@ def data(c, u, message):
 
 def plot(client, userdata, message):
     # customize this to match your data
-    print("plotting ...")
+    # print("plotting ...")
     plt.plot(t, s)
     plt.xlabel('Time (s)')
     plt.ylabel('Valve Position (degrees)')
-    print("show plot ...")
+    # print("show plot ...")
     # show plot on screen
     plt.show()
 

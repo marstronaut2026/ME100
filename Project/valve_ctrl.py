@@ -45,6 +45,7 @@ try:
                 setPos = 90
             else:
                 pass
+
             ctrl_remote(setPos, servo)
             topic = "{}/data".format(session)
             data = "{},{}".format(time.time()-t0, setPos)
