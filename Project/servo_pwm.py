@@ -10,7 +10,7 @@ import sys
 
 def ctrl_remote(setPos, servo):
           
-    du = float(8/90*setPos+3)
+    du = float(4/90*setPos+7)
     servo.duty(du)
  
 
@@ -62,7 +62,7 @@ def ctrl_filter():
         servo.deinit()
 
         i2c.deinit()
-        print("Telling host to plot data ...")
+        # print("Telling host to plot data ...")
         # mqtt.publish("{}/plot".format(session), "create the plot")
         # mqtt.disconnect()
 
@@ -114,7 +114,7 @@ def ctrl():
         servo.deinit()
 
         i2c.deinit()
-        print("Telling host to plot data ...")
+        # print("Telling host to plot data ...")
         # mqtt.publish("{}/plot".format(session), "create the plot")
         # mqtt.disconnect()
 
@@ -123,7 +123,7 @@ def ctrl():
         print("\nGoodbye.")
 
 ###############################################################################################
-def sinwave():
+def manual():
     servo = PWM(Pin(14),freq=50,duty=7)
     # duty_cycle = arr.array('i',[3,7,11]) #enable for 3 pos movement
     time.sleep(1) #give time to get to center position
@@ -133,9 +133,10 @@ def sinwave():
         # f=open("pos.txt","w+")
         while True:
             #Allows for input position for servo
-            val = float(input("Enter servo position: "))
-            time.sleep(5)
-            servo.duty(val)
+            val = float(input("Enter servo position (0 to 90 deg): "))
+            setPos = float(4/90*val+7)
+            servo.duty(setPos)
+            # time.sleep(5)
             # for i in range(3):
             #     servo.duty(duty_cycle[i])
             #     time.sleep(2)
@@ -157,11 +158,11 @@ def sinwave():
 
     except KeyboardInterrupt:
         print("\nReturning to sleep position...")
-        servo.duty(3)
+        servo.duty(7)
         time.sleep(1)
         servo.deinit()
 
-        print("Telling host to plot data ...")
+        # print("Telling host to plot data ...")
         # mqtt.publish("{}/plot".format(session), "create the plot")
         # mqtt.disconnect()
 

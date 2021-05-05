@@ -2,7 +2,7 @@ import paho.mqtt.client as paho
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
-session = "AustinJT/ESP32/servo_pos1"
+session = "SEB/RegulatorDemo"
 BROKER = "broker.mqttdashboard.com"
 qos = 0
 
@@ -49,11 +49,17 @@ def plot(client, userdata, message):
 # subscribe to topics
 data_topic = "{}/data".format(session, qos)
 plot_topic = "{}/plot".format(session, qos)
+set_topic = "{}/set".format(session, qos)
 mqtt.subscribe(data_topic)
 mqtt.subscribe(plot_topic)
 mqtt.message_callback_add(data_topic, data)
 mqtt.message_callback_add(plot_topic, plot)
 
+# Send requested set pressure over mqtt
+setPressure = input("Enter desired tank pressure: ")
+mqtt.publish(set_topic, setPressure)
+
 # wait for MQTT messages
 # this function never returns
+
 mqtt.loop_forever()
