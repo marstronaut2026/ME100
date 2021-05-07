@@ -6,38 +6,43 @@ session = "SEB/RegulatorDemo"
 BROKER = "broker.mqttdashboard.com"
 qos = 0
 
-# connect to MQTT broker
+# Connect to MQTT broker
 print("Connecting to MQTT broker", BROKER, "...", end="")
 mqtt = paho.Client()
 mqtt.connect(BROKER, port=1883)
 print("Connected!")
 
-# initialize data vectors
+# Initialize data vectors
 t = []
 s = []
 p = []
-ii = 0
+ii = 0 #loop counter
 
+# Set file for writing data
 datRecord = open("data2.txt","w")
 
-# mqtt callbacks
+# Handles incoming data over mqtt, 
+# live plotting and writing to file for analysis
 def data(c, u, message):
-    # extract data from MQTT message
     
     global ii
-    ii = ii+1
+    ii += 1
+
+    # Decode and split data into separate vectors
     msg = message.payload.decode('ascii')
-    # convert to vector of floats
     f = [ float(x) for x in msg.split(',') ]
-    # print("received", f)
-    # append to data vectors, add more as needed
-    t.append(f[0])
-    s.append(f[1])
-    p.append(f[2])
+    
+    t.append(f[0]) # time
+    s.append(f[1]) # valve position
+    p.append(f[2]) # pressure
     
     if (ii%5 == 0):
+        # Data to console
         print("{}, {}, {}\n".format(t[-1], s[-1], p[-1]))
+        # Data to file
         datRecord.write("{}, {}, {}\n".format(t[-1], s[-1], p[-1]))
+
+        ##LIVE PLOTTING
         plt.cla()
         plt.subplot(2,1,1)
         plt.plot(t,p)
@@ -50,7 +55,7 @@ def data(c, u, message):
         plt.draw()
         plt.pause(0.05)    
 
-# subscribe to topics
+# Subscribe to topics
 data_topic = "{}/data".format(session, qos)
 set_topic = "{}/set".format(session, qos)
 mqtt.subscribe(data_topic)
@@ -60,12 +65,11 @@ mqtt.message_callback_add(data_topic, data)
 setPressure = input("Enter desired tank pressure: ")
 mqtt.publish(set_topic, setPressure)
 
-# wait for MQTT messages
-# this function never returns
-
 try:
     mqtt.loop_forever()
 
+# Ends PID loop script and saves data to text file
+# CTRL-C for interrupt
 except KeyboardInterrupt:
     kill = "close"
     mqtt.publish(set_topic, kill)
