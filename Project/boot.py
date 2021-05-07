@@ -9,6 +9,8 @@ wlan.active(True)
 
 wlan.connect('JARVIS', 'InitiateInternetAccess', 5000)
 # wlan.connect('SEB WiFi', 'SEBerkeley', 5000)
+# wlan.connect('OnePlus 6', 'AirBearsSad', 5000)
+
 
 tries = 0
 while not wlan.isconnected() and tries < 10:

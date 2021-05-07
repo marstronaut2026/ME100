@@ -1,6 +1,4 @@
-from machine import Pin, PWM, I2C
-from ina219 import INA219
-from board import SDA, SCL
+from machine import Pin, PWM
 import time
 import math as m
 from mqttclient import MQTTClient
@@ -112,7 +110,7 @@ def ctrl():
         servo.duty(3)
         time.sleep(1)
         servo.deinit()
-
+n
         i2c.deinit()
         # print("Telling host to plot data ...")
         # mqtt.publish("{}/plot".format(session), "create the plot")
