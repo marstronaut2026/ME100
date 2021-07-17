@@ -1,9 +1,0 @@
-clc, clear, close all
-
-F = load("run.txt");
-t = F(:,1);
-s = F(:,2);
-p = F(:,3);
-
-plot(t,p,t,s)
-legend("Pressure (psi)","Valve Position (deg)")
