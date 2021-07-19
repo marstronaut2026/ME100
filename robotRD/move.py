@@ -2,16 +2,19 @@ from machine import Pin
 import time
 from math import pi
 
+
 class Error(Exception):
     pass
+
 
 class InputError(Error):
     def __init__(self, expression, message):
         self.expression = expression
         self.message = message
 
+
 class Motor:
-    def __init__(self,pins,mode,dir,size = 1):
+    def __init__(self, pins, mode, dir, size=1):
         self.p1 = Pin(pins[0], Pin.OUT)
         self.p2 = Pin(pins[1], Pin.OUT)
         self.p3 = Pin(pins[2], Pin.OUT)
@@ -19,19 +22,20 @@ class Motor:
         self.mode = mode
         self.dir = dir
         if self.dir != 'l' and self.dir != 'r':
-            raise InputError("You\'re lost",\
-                           "{}: invalid wheel orientation".format(self.dir))
-        if self.mode == 1: # Full Step
+            raise InputError("You\'re lost",
+                             "{}: invalid wheel orientation".format(self.dir))
+        if self.mode == 1:  # Full Step
             self.deg_per_step = 5.625 / 32
-        elif self.mode == 2: # Half Step
+        elif self.mode == 2:  # Half Step
             self.deg_per_step = 5.625 / 64
         else:
-            raise InputError("cat.exe has failed", "{}: invalid mode".format(self.mode))
+            raise InputError("cat.exe has failed",
+                             "{}: invalid mode".format(self.mode))
 
         self.steps_per_rev = int(360/self.deg_per_step)
         self.step_angle = 0
         self.wheel_diameter = size
-    
+
     def _set_rpm(self, rpm):
         self._rpm = rpm
         self._T = (60.0 / rpm)/self.steps_per_rev
@@ -67,7 +71,7 @@ class Motor:
         if self.mode == 1:
             if self.dir == 'r':
                 self._move_cw_1(steps / 4)
-            else: 
+            else:
                 self._move_acw_1(steps / 4)
         else:
             self._move_cw_2(steps / 8)
@@ -82,10 +86,10 @@ class Motor:
     def _move_acw_1(self, big_step):
         self.__clear()
         driveSeq = [
-            [1,1,0,0],
-            [0,1,1,0],
-            [0,0,1,1],
-            [1,0,0,1]
+            [1, 1, 0, 0],
+            [0, 1, 1, 0],
+            [0, 0, 1, 1],
+            [1, 0, 0, 1]
         ]
         for i in range(big_step):
             for j in driveSeq:
@@ -95,15 +99,14 @@ class Motor:
                 self.p4.value(j[3])
                 time.sleep(self._T*2)
         self.__clear()
-        
 
     def _move_cw_1(self, big_step):
         self.__clear()
         driveSeq = [
-            [1,1,0,0],
-            [1,0,0,1],
-            [0,0,1,1],
-            [0,1,1,0]
+            [1, 1, 0, 0],
+            [1, 0, 0, 1],
+            [0, 0, 1, 1],
+            [0, 1, 1, 0]
         ]
         for i in range(big_step):
             for j in driveSeq:
@@ -113,7 +116,6 @@ class Motor:
                 self.p4.value(j[3])
                 time.sleep(self._T*2)
         self.__clear()
-        
 
     def _move_acw_2(self, big_step):
         pass
@@ -121,8 +123,9 @@ class Motor:
     def _move_cw_2(self, big_step):
         pass
 
+
 class Bot:
-    def __init__(self,pins,size = 1):
+    def __init__(self, pins, size=1, width=1):
         self.p1 = Pin(pins[0], Pin.OUT)
         self.p2 = Pin(pins[1], Pin.OUT)
         self.p3 = Pin(pins[2], Pin.OUT)
@@ -132,11 +135,18 @@ class Bot:
         self.p7 = Pin(pins[6], Pin.OUT)
         self.p8 = Pin(pins[7], Pin.OUT)
 
+        # rPins = pins[0:3]
+        # lPins = pins[4:7]
+
+        # mR = Motor(rPins,1,'r',size)
+        # mL = Motor(lPins,1,'l',size)
+
         self.deg_per_step = 5.625 / 32
         self.steps_per_rev = int(360/self.deg_per_step)
         self.step_angle = 0
         self.wheel_diameter = size
-    
+        self._botRad = width / 2
+
     def _set_rpm(self, rpm):
         self._rpm = rpm
         self._T = (60.0 / rpm)/self.steps_per_rev
@@ -152,7 +162,7 @@ class Bot:
         self._move_fw(steps / 4)
 
         self.step_angle = 0
-    
+
     def move_bkd(self, distance):
         angle = distance/(pi*self.wheel_diameter)*360
         target_step_angle = 8*(int(angle/self.deg_per_step)/8)
@@ -162,7 +172,21 @@ class Bot:
         self._move_bk(steps / 4)
 
         self.step_angle = 0
-        
+
+    def turn(self, theta):
+        distance = self._botRad*abs(theta*pi/180)
+        angle = distance/(pi*self.wheel_diameter)*360
+        target_step_angle = 8*(int(angle/self.deg_per_step)/8)
+        steps = target_step_angle-self.step_angle
+
+        if theta > 0:
+            self._turn_r(steps / 4)
+        elif theta < 0:
+            self._turn_l(steps / 4)
+        else:
+            pass
+
+        self.step_angle = 0
 
     def __clear(self):
         self.p1.value(0)
@@ -177,10 +201,10 @@ class Bot:
     def _move_fw(self, big_step):
         self.__clear()
         driveSeq = [
-            [1,1,0,0],
-            [1,0,0,1],
-            [0,0,1,1],
-            [0,1,1,0]
+            [1, 1, 0, 0],
+            [1, 0, 0, 1],
+            [0, 0, 1, 1],
+            [0, 1, 1, 0]
         ]
         for i in range(big_step):
             for j in driveSeq:
@@ -198,10 +222,10 @@ class Bot:
     def _move_bk(self, big_step):
         self.__clear()
         driveSeq = [
-            [1,1,0,0],
-            [0,1,1,0],
-            [0,0,1,1],
-            [1,0,0,1]
+            [1, 1, 0, 0],
+            [0, 1, 1, 0],
+            [0, 0, 1, 1],
+            [1, 0, 0, 1]
         ]
         for i in range(big_step):
             for j in driveSeq:
@@ -213,5 +237,47 @@ class Bot:
                 self.p7.value(j[1])
                 self.p4.value(j[3])
                 self.p8.value(j[0])
+                time.sleep(self._T*2)
+        self.__clear()
+
+    def _turn_r(self, r_step):
+        self.__clear()
+        driveSeq = [
+            [1, 1, 0, 0],
+            [1, 0, 0, 1],
+            [0, 0, 1, 1],
+            [0, 1, 1, 0]
+        ]
+        for i in range(r_step):
+            for j in driveSeq:
+                self.p1.value(j[0])
+                self.p5.value(j[0])
+                self.p2.value(j[1])
+                self.p6.value(j[1])
+                self.p3.value(j[2])
+                self.p7.value(j[2])
+                self.p4.value(j[3])
+                self.p8.value(j[3])
+                time.sleep(self._T*2)
+        self.__clear()
+
+    def _turn_l(self, l_step):
+        self.__clear()
+        driveSeq = [
+            [1, 1, 0, 0],
+            [0, 1, 1, 0],
+            [0, 0, 1, 1],
+            [1, 0, 0, 1]
+        ]
+        for i in range(l_step):
+            for j in driveSeq:
+                self.p1.value(j[0])
+                self.p5.value(j[0])
+                self.p2.value(j[1])
+                self.p6.value(j[1])
+                self.p3.value(j[2])
+                self.p7.value(j[2])
+                self.p4.value(j[3])
+                self.p8.value(j[3])
                 time.sleep(self._T*2)
         self.__clear()

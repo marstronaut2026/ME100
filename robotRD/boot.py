@@ -42,7 +42,7 @@ except OSError:
 from network import telnet
 
 print("start telnet server")
-telnet.start(user='nuclearwalrus', password='rktman')
+telnet.start(user='walrus', password='rktman')
 
 # fetch NTP time
 from machine import RTC
