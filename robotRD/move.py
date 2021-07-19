@@ -2,12 +2,12 @@ from machine import Pin
 import time
 from math import pi
 
-author: nuclearwalrus
-credit: Stephen C. Philips http://scphillips.com 
-This code is my own, however some functions were inspired by the above. 
-Feel free to use as you please. Credit would be appreciated. 
+# author: nuclearwalrus
+# credit: Stephen C. Philips http://scphillips.com 
+# This code is my own, however some functions were inspired by the above. 
+# Feel free to use as you please. Credit would be appreciated. 
 
-Classes for defining motors and bots using 6-pin stepper motors. 
+# Classes for defining motors and bots using 6-pin stepper motors. 
 
 
 
