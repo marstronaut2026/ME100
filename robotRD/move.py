@@ -2,7 +2,7 @@ from machine import Pin
 import time
 from math import pi
 
-# author: nuclearwalrus
+# author: marstronaut2026
 # credit: Stephen C. Philips http://scphillips.com 
 # This code is my own, however some functions were inspired by the above. 
 # Feel free to use as you please. Credit would be appreciated. 
